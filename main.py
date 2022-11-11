@@ -11,7 +11,7 @@ import time
 def main():
     words = words_list.get_words_list()
 
-    mode = 'online'  # 'local' will guess a random word in list. 'online' will play on the web browser
+    mode = 'local'  # 'local' will guess a random word in list. 'online' will play on the web browser
 
     if 'local' == mode:
         word_to_guess = random.choice(words)
@@ -32,20 +32,20 @@ def main():
     for i in range(1, 7):
         guess = get_guess(words)
         print('Guess is: ' + guess)
-        for letter in guess:
-            if 'online' == mode:
+
+        if 'online' == mode:
+            for letter in guess:
                 css_selector = '%s[data-key="%s"]' % (keys_buttons_selector, letter)
                 key_button = driver.find_element(By.CSS_SELECTOR, css_selector)
                 key_button.click()
 
-        if 'online' == mode:
             enter_button.click()
             time.sleep(2)
 
-        if 'local' == mode:
-            comparison = compare_words(word_to_guess, guess)
-        else:
             comparison = decode_hints(i, driver)
+        else:
+            comparison = compare_words(word_to_guess, guess)
+
         print('Comparison: ' + comparison)
         if 'vvvvv' == comparison:
             print('the word is: ' + guess)
